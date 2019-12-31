@@ -1,0 +1,4 @@
+discord.py
+sqlalchemy
+
+git+https://github.com/DACRepair/python-gunbroker.git
