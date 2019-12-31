@@ -45,7 +45,7 @@ async def gunbroker(ctx):
             await ctx.send('To use: !gunbroker [search text] <?limit,default:{}, max: {}>'.format(DEFAULT, MAX))
         else:
             async with ctx.channel.typing():
-                parsed = {"search": "", 'limit': 10}
+                parsed = {"search": "", 'limit': DEFAULT}
                 for x in message[1:]:
                     if x.startswith("?"):
                         parsed.update({'limit': int(x[1:])})
@@ -64,7 +64,7 @@ async def gunbroker(ctx):
                     ses.commit()
                     ses.close()
 
-                results = gb.search(**parsed)
+                results = gb.search(**parsed)[0:int(parsed['limit'])]
                 for result in results:
                     embed = discord.Embed(title="{} | Qty: {}".format(result['name'], result['qty']),
                                           url=result['url'],
