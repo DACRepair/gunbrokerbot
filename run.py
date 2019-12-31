@@ -90,4 +90,6 @@ async def gunbroker(ctx):
                 await ctx.send(embed=embed)
 
 
+if storage:
+    Base.metadata.create_all()
 bot.run(TOKEN)
