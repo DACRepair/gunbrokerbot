@@ -1,4 +1,5 @@
 import os
+import re
 import discord
 from discord.ext import commands
 from gunbroker import GunBroker
@@ -48,7 +49,7 @@ async def gunbroker(ctx):
                 parsed = {"search": "", 'limit': DEFAULT}
                 for x in message[1:]:
                     if x.startswith("?"):
-                        parsed.update({'limit': int(x[1:])})
+                        parsed.update({'limit': int(re.sub("[^0-9]","",x[1:]))})
                     else:
                         parsed.update({'search': parsed['search'] + " " + x})
 
