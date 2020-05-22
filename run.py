@@ -16,7 +16,7 @@ DB_URI = str(os.getenv("DB_URL", config.get('storage', 'uri')))
 DEFAULT = int(os.getenv("RESULTS", config.getint('gunbroker', 'results', fallback=3)))
 MAX = int(os.getenv("MAX", config.getint('gunbroker', 'max', fallback=10)))
 PREFIX = str(os.getenv("PREFIX", config.get('discord', 'prefix', fallback="!")))
-USER_AGENT = str(os.getenv("PREFIX", config.get('gunbroker', 'user_agent', fallback="")))
+USER_AGENT = str(os.getenv("USER_AGENT", config.get('gunbroker', 'user_agent', fallback="")))
 
 if len(USER_AGENT) < 1:
     print("This bot now requires you set a user agent with the ENV var of \"USER_AGENT\"")
