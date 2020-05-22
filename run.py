@@ -80,8 +80,6 @@ async def gunbroker(ctx):
                     ses.close()
 
                 results = gb.search(**parsed)[0:int(parsed['limit'])]
-                from pprint import pprint
-                pprint(results)
 
                 for result in results:
                     embed = discord.Embed(title="{} | Qty: {}".format(result['name'], result['qty']),
