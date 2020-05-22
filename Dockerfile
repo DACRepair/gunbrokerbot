@@ -8,6 +8,8 @@ ENV MAX 25
 
 ENV PREFIX !
 
+ENV USER_AGENT ""
+
 
 WORKDIR /usr/src/gunbrokerbot
 COPY requirements.txt /usr/src/gunbrokerbot/

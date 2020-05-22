@@ -1,14 +1,26 @@
 import os
+from configparser import ConfigParser
+
 import discord
 from discord.ext import commands
 from gunbroker import GunBroker
 
-TOKEN = str(os.getenv("TOKEN", ""))
-CHANNEL = str(os.getenv("TOKEN", ""))
-DB_URI = str(os.getenv("DB_URL", ""))
-DEFAULT = int(os.getenv("DEFAULT", 3))
-MAX = int(os.getenv("MAX", 5))
-PREFIX = str(os.getenv("PREFIX", "!"))
+path = os.path.normpath(os.getcwd() + "/config.ini")
+config = ConfigParser()
+if os.path.isfile(path):
+    config.read(path)
+
+TOKEN = str(os.getenv("TOKEN", config.get('discord', 'token')))
+CHANNEL = str(os.getenv("TOKEN", config.get('discord', 'channel')))
+DB_URI = str(os.getenv("DB_URL", config.get('storage', 'uri')))
+DEFAULT = int(os.getenv("RESULTS", config.getint('gunbroker', 'results', fallback=3)))
+MAX = int(os.getenv("MAX", config.getint('gunbroker', 'max', fallback=10)))
+PREFIX = str(os.getenv("PREFIX", config.get('discord', 'prefix', fallback="!")))
+USER_AGENT = str(os.getenv("PREFIX", config.get('gunbroker', 'user_agent', fallback="")))
+
+if len(USER_AGENT) < 1:
+    print("This bot now requires you set a user agent with the ENV var of \"USER_AGENT\"")
+    exit(0)
 
 if len(DB_URI) > 0:
     storage = True
@@ -30,11 +42,14 @@ if len(DB_URI) > 0:
         search = Column(String(256))
         limit = Column(Integer)
 
+
+    Base.metadata.create_all()
+
 else:
     storage = False
 
 bot = commands.Bot(command_prefix=PREFIX)
-gb = GunBroker()
+gb = GunBroker(user_agent=USER_AGENT)
 
 
 @bot.command()
@@ -65,6 +80,9 @@ async def gunbroker(ctx):
                     ses.close()
 
                 results = gb.search(**parsed)[0:int(parsed['limit'])]
+                from pprint import pprint
+                pprint(results)
+
                 for result in results:
                     embed = discord.Embed(title="{} | Qty: {}".format(result['name'], result['qty']),
                                           url=result['url'],
@@ -92,6 +110,4 @@ async def gunbroker(ctx):
                     await ctx.send(embed=embed)
 
 
-if storage:
-    Base.metadata.create_all()
 bot.run(TOKEN)
