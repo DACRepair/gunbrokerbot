@@ -10,9 +10,9 @@ config = ConfigParser()
 if os.path.isfile(path):
     config.read(path)
 
-TOKEN = str(os.getenv("TOKEN", config.get('discord', 'token')))
-CHANNEL = str(os.getenv("TOKEN", config.get('discord', 'channel')))
-DB_URI = str(os.getenv("DB_URL", config.get('storage', 'uri')))
+TOKEN = str(os.getenv("TOKEN", config.get('discord', 'token', fallback="")))
+CHANNEL = str(os.getenv("TOKEN", config.get('discord', 'channel', fallback="")))
+DB_URI = str(os.getenv("DB_URL", config.get('storage', 'uri', fallback="")))
 DEFAULT = int(os.getenv("RESULTS", config.getint('gunbroker', 'results', fallback=3)))
 MAX = int(os.getenv("MAX", config.getint('gunbroker', 'max', fallback=10)))
 PREFIX = str(os.getenv("PREFIX", config.get('discord', 'prefix', fallback="!")))
