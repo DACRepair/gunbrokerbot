@@ -86,7 +86,10 @@ async def gunbroker(ctx):
                                           url=result['url'],
                                           description=result['desc'])
 
-                    embed.set_thumbnail(url=result['image'])
+                    image = str(result['image'])
+                    if image.split(".")[-1] in ['jpg', 'gif', 'png', 'jpeg']:
+                        embed.set_thumbnail(url=result['image'])
+
                     embed.set_author(name=result['seller'])
 
                     if result['buy_now'] is not None:
